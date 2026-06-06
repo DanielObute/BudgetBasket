@@ -104,9 +104,13 @@ const EXISTING_USERS = [
       <h2>Verify Your Email</h2>
   
       <p>Enter the 6-digit code sent to your email</p>
-  
+
       <div id="message"></div>
-  
+
+      <p id="timer" class="timer">
+        Code expires in 30s
+     </p>
+
       <div class="otp-container">
         <input maxlength="1" class="otp-input">
         <input maxlength="1" class="otp-input">
@@ -125,6 +129,15 @@ const EXISTING_USERS = [
       </button>
     `;
   
+
+    const message =
+     document.getElementById("message");
+
+    const timer =
+     document.getElementById("timer");
+
+    let countdown = 30;
+
     const otpInputs =
       document.querySelectorAll(".otp-input");
   
@@ -135,26 +148,30 @@ const EXISTING_USERS = [
 
     const resendBtn =
       document.getElementById("resendBtn");
-  
-    const message =
-      document.getElementById("message");
-      let countdown = 30;
 
       resendBtn.disabled = true;
       
       resendBtn.textContent =
         `Resend in ${countdown}s`;
       
-      const timer = setInterval(() => {
+      const countdownInterval = setInterval(() => {
       
         countdown--;
+
+        timer.textContent = 
+         `Code expires in ${countdown}s`;
       
         resendBtn.textContent =
           `Resend in ${countdown}s`;
       
         if (countdown <= 0) {
       
-          clearInterval(timer);
+          clearInterval(countdownInterval);
+
+          message.textContent = 
+           "x Verification code expired";
+
+          message.className = "error"
       
           resendBtn.disabled = false;
       
@@ -242,7 +259,7 @@ const EXISTING_USERS = [
   
         } else {
   
-          message.textContent =
+          message.textContent 
             "✕ Incorrect verification code";
   
           message.className =
@@ -279,6 +296,8 @@ const EXISTING_USERS = [
 
   
       <h2>Complete Your Profile</h2>
+
+      <div id="message"></div>
   
       <input
         type="text"
@@ -331,28 +350,70 @@ const EXISTING_USERS = [
   
       <h2>Dashboard</h2>
 
-      <div id="message" class="success">
-      ✓ Authentication Successful
-    </div>
-  
-      <p>
-        Welcome,
-        ${state.fullName || state.email}
-      </p>
+     <p>
+      Welcome,
+      ${state.fullName || state.email}
+    </p>
 
-      <div class="dashboard-info">
-  
-      <p>
-        <strong>Status:</strong> Active
-      </p>
+    <div class="stats-grid">
 
-      <p>
-        <strong>Last Login:</strong> Just now
-      </p>
-
+      <div class="stat-card">
+        <h4>Account Balance</h4>
+        <h3>$8,420</h3>
       </div>
-    `;
-  
-  }
+
+      <div class="stat-card">
+        <h4>Monthly Budget</h4>
+        <h3>$2,400</h3>
+      </div>
+
+      <div class="stat-card">
+        <h4>Remaining Budget</h4>
+        <h3>$307</h3>
+      </div>
+
+      <div class="stat-card">
+        <h4>Reward Points</h4>
+        <h3>1,240</h3>
+      </div>
+
+    </div>
+
+    <div class="budget-section">
+
+      <h3>Monthly Budget Usage</h3>
+
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+
+      <p>$2,093 spent of $2,400 budget</p>
+
+    </div>
+
+    <div class="categories">
+
+      <h3>Top Categories</h3>
+
+      <div class="category-item">
+        <span>🍔 Food</span>
+        <span>$520</span>
+      </div>
+
+      <div class="category-item">
+        <span>🚗 Transport</span>
+        <span>$310</span>
+      </div>
+
+      <div class="category-item">
+        <span>🎬 Entertainment</span>
+        <span>$240</span>
+      </div>
+
+    </div>
+  `;
+} 
+
+     
   
   renderEmailScreen();
