@@ -53,6 +53,8 @@ input:focus {
 button {
   width: 100%;
   padding: 18px;
+  background: #08153d;
+  color: white;
   border: none;
   border-radius: 12px;
   font-size: 16px;
@@ -64,8 +66,9 @@ button:hover {
 }
 
 button:disabled {
-  opacity: 0.6;
+  opacity: 0.7;
   cursor: not-allowed;
+  background: #08153d;
 }
 
 #resendBtn {
@@ -85,13 +88,15 @@ button:disabled {
 .otp-input {
   width: 55px;
   height: 60px;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: bold;
-  line-height: 60px;
+  line-height: normal;
   padding: 0;
   text-align: center;
   border: 1px solid #d1d5db;
   border-radius: 12px;
+  appearance: none;
+  -webkit-appearance: none;
 
 }
 
@@ -391,16 +396,6 @@ label {
 
 .footer-text {
   margin-top: 40px;
-}
-
-#continueBtn {
-  background: #08153d;
-  color: white;
-}
-
-#continueBtn:disabled {
-  background: #08153d;
-  opacity: 0.7;
 }
 
 .auth-box input,
