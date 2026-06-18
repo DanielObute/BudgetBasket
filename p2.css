@@ -112,7 +112,8 @@
      display: none;
    }
    
-   input[type="text"], input[type="email"] {
+   input[type="text"],
+   input[type="email"] {
      width: 100%;
      padding: 11px 14px;
      border: 1.5px solid #e2e8f0;
@@ -124,7 +125,8 @@
      transition: border-color 0.2s;
    }
    
-   input[type="text"]:focus, input[type="email"]:focus { border-color: #a855f7; }
+   input[type="text"]:focus,
+   input[type="email"]:focus { border-color: #a855f7; }
    
    .primary-btn {
      width: 100%;
@@ -198,8 +200,25 @@
      margin-top: 14px;
    }
    
-   .otp-success { color: #16a34a; font-size: 13px; text-align: center; background: #f0fdf4; padding: 8px; border-radius: 6px; margin-bottom: 12px; }
-   .otp-error { color: #dc2626; font-size: 13px; text-align: center; background: #fef2f2; padding: 8px; border-radius: 6px; margin-bottom: 12px; }
+   .otp-success {
+     color: #16a34a;
+     font-size: 13px;
+     text-align: center;
+     background: #f0fdf4;
+     padding: 8px;
+     border-radius: 6px;
+     margin-bottom: 12px;
+   }
+   
+   .otp-error {
+     color: #dc2626;
+     font-size: 13px;
+     text-align: center;
+     background: #fef2f2;
+     padding: 8px;
+     border-radius: 6px;
+     margin-bottom: 12px;
+   }
    
    /* ==========================================================================
       APP SHELL
@@ -332,7 +351,6 @@
      cursor: pointer;
      color: #6b7280;
      transition: all 0.15s;
-     position: relative;
    }
    
    .notif-btn:hover { background: #f3f4f6; }
@@ -391,10 +409,7 @@
      margin-bottom: 2px;
    }
    
-   .panel-sub {
-     font-size: 12px;
-     color: #9ca3af;
-   }
+   .panel-sub { font-size: 12px; color: #9ca3af; }
    
    .panel-head {
      display: flex;
@@ -510,8 +525,6 @@
      margin-bottom: 20px;
    }
    
-   .budget-health-panel {}
-   
    .close-limit-tag {
      font-size: 11px;
      font-weight: 700;
@@ -557,10 +570,13 @@
      cursor: pointer;
      display: flex;
      align-items: center;
-     gap: 4px;
+     gap: 5px;
+     padding: 4px 8px;
+     border-radius: 6px;
+     transition: all 0.15s;
    }
    
-   .edit-link:hover { color: #6b7280; }
+   .edit-link:hover { background: #f3f4f6; color: #6b7280; }
    
    /* SPENDING CATEGORIES */
    .categories-panel { margin-bottom: 20px; }
@@ -749,17 +765,6 @@
    /* ==========================================================================
       INSIGHTS VIEW
       ========================================================================== */
-   .insights-row {
-     display: grid;
-     grid-template-columns: 1fr 280px;
-     gap: 16px;
-     margin-bottom: 16px;
-   }
-   
-   .insights-line-panel {}
-   .insights-donut-panel {}
-   .insights-bar-panel {}
-   
    .insights-head {
      display: flex;
      justify-content: space-between;
@@ -848,10 +853,7 @@
    }
    
    .points-sub { font-size: 11px; opacity: 0.9; }
-   
    .points-desc { font-size: 12px; color: #6b7280; line-height: 1.6; }
-   
-   .redeem-panel {}
    
    .redeem-head { margin-bottom: 20px; }
    .redeem-head h3 { font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 4px; }
@@ -950,7 +952,6 @@
      max-width: 560px;
    }
    
-   .settings-panel {}
    .settings-section-title { font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 2px; }
    .settings-section-sub { font-size: 12px; color: #9ca3af; margin-bottom: 16px; }
    
@@ -967,7 +968,6 @@
      display: flex;
      justify-content: space-between;
      align-items: flex-start;
-     margin-bottom: 0;
    }
    
    .budget-display-val {
@@ -1080,7 +1080,7 @@
      flex-shrink: 0;
    }
    
-   /* Chrome number input spinner hide */
+   /* Hide number input spinners */
    input[type=number]::-webkit-outer-spin-button,
    input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
    input[type=number] { -moz-appearance: textfield; }

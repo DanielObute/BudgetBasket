@@ -13,11 +13,13 @@ const state = {
   monthlyBudget: 2400 // Tracks state across screens
 };
 
-
+// ==========================================================================
+// GLOBAL CONFIG & STATE
+// ==========================================================================
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
- 
+
 // ==========================================================================
 // 1. EMAIL SCREEN
 // ==========================================================================
@@ -42,12 +44,12 @@ function renderEmailScreen() {
       <p class="footer-text">By continuing, you agree to our Terms and Privacy Policy.</p>
     </div>
   `;
- 
+
   const emailInput = document.getElementById("email");
   const continueBtn = document.getElementById("continueBtn");
   const emailCheck = document.getElementById("emailCheck");
   const emailWrapper = document.getElementById("emailWrapper");
- 
+
   emailInput.addEventListener("input", () => {
     const email = emailInput.value.trim();
     if (validateEmail(email)) {
@@ -60,7 +62,7 @@ function renderEmailScreen() {
       emailCheck.style.display = "none";
     }
   });
- 
+
   continueBtn.addEventListener("click", () => {
     state.email = emailInput.value.trim();
     continueBtn.textContent = "Loading...";
@@ -68,7 +70,7 @@ function renderEmailScreen() {
     setTimeout(() => renderOtpScreen(), 1500);
   });
 }
- 
+
 // ==========================================================================
 // 2. OTP SCREEN
 // ==========================================================================
@@ -98,15 +100,15 @@ function renderOtpScreen() {
       <p class="footer-text">By continuing, you agree to our Terms and Privacy Policy.</p>
     </div>
   `;
- 
+
   document.getElementById("backBtn").addEventListener("click", () => renderEmailScreen());
- 
+
   const otpInputs = document.querySelectorAll(".otp-input");
   const verifyBtn = document.getElementById("verifyBtn");
   const otpMessage = document.getElementById("otpMessage");
   const countdownEl = document.getElementById("countdown");
   const resendText = document.getElementById("resendText");
- 
+
   let seconds = 30;
   const timer = setInterval(() => {
     seconds--;
@@ -117,9 +119,9 @@ function renderOtpScreen() {
       document.getElementById("resendLink").addEventListener("click", () => renderOtpScreen());
     }
   }, 1000);
- 
+
   otpInputs[0].focus();
- 
+
   otpInputs.forEach((input, index) => {
     input.addEventListener("input", () => {
       input.value = input.value.replace(/[^0-9]/g, "");
@@ -132,7 +134,7 @@ function renderOtpScreen() {
       if (e.key === "Backspace" && !input.value && index > 0) otpInputs[index - 1].focus();
     });
   });
- 
+
   verifyBtn.addEventListener("click", () => {
     verifyBtn.textContent = "Verifying...";
     verifyBtn.disabled = true;
@@ -156,7 +158,7 @@ function renderOtpScreen() {
     }, 1000);
   });
 }
- 
+
 // ==========================================================================
 // 3. ONBOARDING SCREEN
 // ==========================================================================
@@ -177,11 +179,11 @@ function renderOnboardingScreen() {
       </div>
     </div>
   `;
- 
+
   const finishBtn = document.getElementById("finishBtn");
   const fullNameInput = document.getElementById("fullName");
   const nameMessage = document.getElementById("nameMessage");
- 
+
   finishBtn.addEventListener("click", () => {
     const name = fullNameInput.value.trim();
     if (!name) {
@@ -193,14 +195,13 @@ function renderOnboardingScreen() {
     renderDashboard();
   });
 }
- 
+
 // ==========================================================================
-// 4. DASHBOARD SHELL (Sidebar + Main slot)
+// 4. DASHBOARD SHELL
 // ==========================================================================
 function renderDashboard() {
   document.querySelector(".container").innerHTML = `
     <div class="app-layout">
- 
       <aside class="sidebar">
         <div class="sidebar-logo">
           <div class="logo-icon">✦</div>
@@ -237,39 +238,36 @@ function renderDashboard() {
           </button>
         </div>
       </aside>
- 
       <main class="main-content" id="main-view-slot"></main>
     </div>
   `;
- 
-  // Tab navigation
+
   document.getElementById("tab-dashboard").addEventListener("click", () => { setTab("tab-dashboard"); renderDashboardView(); });
   document.getElementById("tab-transactions").addEventListener("click", () => { setTab("tab-transactions"); renderTransactionsView(); });
   document.getElementById("tab-insights").addEventListener("click", () => { setTab("tab-insights"); renderInsightsView(); });
   document.getElementById("tab-rewards").addEventListener("click", () => { setTab("tab-rewards"); renderRewardsView(); });
   document.getElementById("tab-settings").addEventListener("click", () => { setTab("tab-settings"); renderSettingsView(); });
- 
   document.getElementById("logoutBtn").addEventListener("click", () => {
     state.email = "";
     state.fullName = "";
     renderEmailScreen();
   });
- 
+
   renderDashboardView();
 }
- 
+
 function setTab(activeId) {
   document.querySelectorAll(".nav-item").forEach(el => el.classList.remove("active"));
   const el = document.getElementById(activeId);
   if (el) el.classList.add("active");
 }
- 
-function renderPageHeader(title, subtitle) {
+
+function renderPageHeader(title) {
   return `
     <div class="page-header">
       <div class="page-header-left">
         <h1>${title}</h1>
-        <p>${subtitle || `Welcome back, ${state.fullName || state.email} — let's keep your budget on track.`}</p>
+        <p>Welcome back, ${state.fullName || state.email} — let's keep your budget on track.</p>
       </div>
       <div class="page-header-right">
         <button class="notif-btn" id="notifBtn">
@@ -284,7 +282,7 @@ function renderPageHeader(title, subtitle) {
     </div>
   `;
 }
- 
+
 function attachNotifToggle() {
   const btn = document.getElementById("notifBtn");
   const popup = document.getElementById("notifPopup");
@@ -293,10 +291,10 @@ function attachNotifToggle() {
       e.stopPropagation();
       popup.classList.toggle("show");
     });
-    document.addEventListener("click", () => popup.classList.remove("show"), { once: false });
+    document.addEventListener("click", () => popup.classList.remove("show"));
   }
 }
- 
+
 // ==========================================================================
 // 5. DASHBOARD VIEW
 // ==========================================================================
@@ -304,10 +302,10 @@ function renderDashboardView() {
   const budget = state.monthlyBudget;
   const spent = 2093;
   const pct = Math.round((spent / budget) * 100);
- 
+
   document.getElementById("main-view-slot").innerHTML = `
     ${renderPageHeader("Dashboard")}
- 
+
     <div class="hero-banner">
       <div class="hero-left">
         <span class="hero-tag">🏆 YOU'RE CRUSHING IT</span>
@@ -316,7 +314,7 @@ function renderDashboardView() {
       </div>
       <button class="hero-btn" id="redeemBannerBtn">Redeem rewards</button>
     </div>
- 
+
     <div class="stats-row">
       <div class="stat-card">
         <div class="stat-top">
@@ -359,7 +357,7 @@ function renderDashboardView() {
         <h3 class="stat-value">1,240</h3>
       </div>
     </div>
- 
+
     <div class="dashboard-bottom">
       <div class="panel budget-health-panel">
         <div class="panel-head">
@@ -375,17 +373,20 @@ function renderDashboardView() {
           <span>$${budget.toLocaleString()}</span>
         </div>
       </div>
- 
+
       <div class="panel budget-number-panel">
         <div class="panel-head">
           <h3>Monthly budget</h3>
-          <button class="edit-link" onclick="setTab('tab-settings'); renderSettingsView();">✏ Edit</button>
+          <button class="edit-link" onclick="setTab('tab-settings'); renderSettingsView();">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit
+          </button>
         </div>
         <h2 class="budget-big">$${budget.toLocaleString()}</h2>
         <p class="panel-sub">Resets on the 1st of each month</p>
       </div>
     </div>
- 
+
     <div class="panel categories-panel">
       <div class="panel-head"><h3>Spending categories</h3></div>
       <p class="panel-sub" style="margin-bottom:20px;">Track each category at a glance</p>
@@ -441,11 +442,11 @@ function renderDashboardView() {
       </div>
     </div>
   `;
- 
+
   attachNotifToggle();
   document.getElementById("redeemBannerBtn").addEventListener("click", () => { setTab("tab-rewards"); renderRewardsView(); });
 }
- 
+
 // ==========================================================================
 // 6. TRANSACTIONS VIEW
 // ==========================================================================
@@ -468,14 +469,14 @@ function renderTransactionsView() {
   let selectedCat = "All";
   let search = "";
   let dropOpen = false;
- 
+
   function filtered() {
     return transactions.filter(t =>
       (selectedCat === "All" || t.category === selectedCat) &&
       t.name.toLowerCase().includes(search.toLowerCase())
     );
   }
- 
+
   function renderList() {
     const list = filtered();
     document.getElementById("txn-count").textContent = `${list.length} of ${transactions.length} shown`;
@@ -497,7 +498,7 @@ function renderTransactionsView() {
         </div>
       `).join("");
   }
- 
+
   function renderDrop() {
     document.getElementById("cat-dropdown").innerHTML = categories.map(c => `
       <div class="drop-item ${c === selectedCat ? "drop-selected" : ""}" data-cat="${c}">
@@ -514,7 +515,7 @@ function renderTransactionsView() {
       });
     });
   }
- 
+
   document.getElementById("main-view-slot").innerHTML = `
     ${renderPageHeader("Transactions")}
     <div class="panel txn-panel">
@@ -540,11 +541,11 @@ function renderTransactionsView() {
       <div id="txn-list"></div>
     </div>
   `;
- 
+
   renderList();
   renderDrop();
   attachNotifToggle();
- 
+
   document.getElementById("txn-search").addEventListener("input", e => { search = e.target.value; renderList(); });
   document.getElementById("filter-toggle").addEventListener("click", e => {
     e.stopPropagation();
@@ -557,32 +558,43 @@ function renderTransactionsView() {
     if (d) d.classList.remove("open");
   });
 }
- 
+
 // ==========================================================================
-// 7. INSIGHTS VIEW
+// 7. INSIGHTS VIEW — full width line chart, interactive tooltip + crosshair
 // ==========================================================================
 function renderInsightsView() {
   document.getElementById("main-view-slot").innerHTML = `
     ${renderPageHeader("Insights")}
-    <div class="insights-row">
-      <div class="panel insights-line-panel">
+
+    <div class="panel" style="margin-bottom:16px;">
+      <div class="insights-head">
+        <div>
+          <h3 class="panel-title">Spending trend</h3>
+          <p class="panel-sub">Budget vs actual this month</p>
+        </div>
+        <span class="trend-tag">↗ 12% vs last month</span>
+      </div>
+      <canvas id="lineChart" height="90"></canvas>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 260px; gap:16px; margin-bottom:16px;">
+      <div class="panel">
         <div class="insights-head">
           <div>
-            <h3 class="panel-title">Spending trend</h3>
-            <p class="panel-sub">Budget vs actual this month</p>
+            <h3 class="panel-title">Budget vs actual by category</h3>
+            <p class="panel-sub">Spot overspending instantly</p>
           </div>
-          <span class="trend-tag">↗ 12% vs last month</span>
         </div>
-        <canvas id="lineChart"></canvas>
+        <canvas id="barChart" height="130"></canvas>
       </div>
-      <div class="panel insights-donut-panel">
+      <div class="panel">
         <div class="insights-head">
           <div>
             <h3 class="panel-title">By category</h3>
             <p class="panel-sub">Where your money went</p>
           </div>
         </div>
-        <canvas id="donutChart"></canvas>
+        <canvas id="donutChart" height="180"></canvas>
         <div class="donut-legend">
           <span><i style="background:#10b981"></i>Groceries</span>
           <span><i style="background:#3b82f6"></i>Transportation</span>
@@ -593,67 +605,177 @@ function renderInsightsView() {
         </div>
       </div>
     </div>
-    <div class="panel insights-bar-panel">
-      <div class="insights-head">
-        <div>
-          <h3 class="panel-title">Budget vs actual by category</h3>
-          <p class="panel-sub">Spot overspending instantly</p>
-        </div>
-      </div>
-      <canvas id="barChart"></canvas>
-    </div>
   `;
- 
+
   attachNotifToggle();
- 
+
+  // LINE CHART — interactive tooltip + crosshair
   new Chart(document.getElementById("lineChart").getContext("2d"), {
     type: "line",
     data: {
       labels: ["Wk1", "Wk2", "Wk3", "Wk4", "Now"],
       datasets: [
-        { label: "Budget", data: [600, 1200, 1800, 2100, 2400], borderColor: "#c4b5fd", backgroundColor: "rgba(196,181,253,0.12)", fill: true, tension: 0.4, pointRadius: 0, borderWidth: 2 },
-        { label: "Actual", data: [400, 850, 1300, 1800, 2093], borderColor: "#10b981", backgroundColor: "rgba(16,185,129,0.08)", fill: true, tension: 0.4, pointRadius: 0, borderWidth: 2 }
+        {
+          label: "Budget",
+          data: [600, 1200, 1800, 2100, 2400],
+          borderColor: "#c4b5fd",
+          backgroundColor: "rgba(196,181,253,0.15)",
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: "#c4b5fd",
+          pointHoverBorderColor: "white",
+          pointHoverBorderWidth: 2,
+          borderWidth: 2
+        },
+        {
+          label: "Actual",
+          data: [400, 850, 1300, 1800, 2093],
+          borderColor: "#10b981",
+          backgroundColor: "rgba(16,185,129,0.08)",
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: "#10b981",
+          pointHoverBorderColor: "white",
+          pointHoverBorderWidth: 2,
+          borderWidth: 2
+        }
       ]
     },
     options: {
-      responsive: true, maintainAspectRatio: true,
-      plugins: { legend: { display: false } },
+      responsive: true,
+      maintainAspectRatio: true,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          enabled: true,
+          backgroundColor: "white",
+          titleColor: "#111827",
+          bodyColor: "#6b7280",
+          borderColor: "#e5e7eb",
+          borderWidth: 1,
+          padding: 12,
+          boxPadding: 6,
+          usePointStyle: true,
+          callbacks: {
+            title: (items) => items[0].label,
+            label: (item) => `  ${item.dataset.label}: $${item.parsed.y.toLocaleString()}`
+          }
+        }
+      },
+      hover: { mode: "index", intersect: false },
       scales: {
-        y: { beginAtZero: true, grid: { color: "#f3f4f6" }, ticks: { color: "#9ca3af", font: { size: 11 } } },
-        x: { grid: { display: false }, ticks: { color: "#9ca3af", font: { size: 11 } } }
+        y: {
+          beginAtZero: true,
+          grid: { color: "#f3f4f6" },
+          ticks: { color: "#9ca3af", font: { size: 11 } }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { color: "#9ca3af", font: { size: 11 } }
+        }
       }
-    }
+    },
+    plugins: [{
+      id: "crosshair",
+      afterDraw(chart) {
+        if (chart.tooltip._active && chart.tooltip._active.length) {
+          const ctx = chart.ctx;
+          const x = chart.tooltip._active[0].element.x;
+          const topY = chart.scales.y.top;
+          const bottomY = chart.scales.y.bottom;
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(x, topY);
+          ctx.lineTo(x, bottomY);
+          ctx.lineWidth = 1;
+          ctx.strokeStyle = "#e5e7eb";
+          ctx.setLineDash([4, 4]);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+    }]
   });
- 
+
+  // DONUT CHART
   new Chart(document.getElementById("donutChart").getContext("2d"), {
     type: "doughnut",
     data: {
       labels: ["Groceries", "Transportation", "Entertainment", "Bills", "Shopping", "Dining"],
-      datasets: [{ data: [289, 30, 26, 142, 150, 37], backgroundColor: ["#10b981", "#3b82f6", "#a855f7", "#f59e0b", "#ef4444", "#f97316"], borderWidth: 3, borderColor: "#fff" }]
+      datasets: [{
+        data: [289, 30, 26, 142, 150, 37],
+        backgroundColor: ["#10b981","#3b82f6","#a855f7","#f59e0b","#ef4444","#f97316"],
+        borderWidth: 3,
+        borderColor: "#fff"
+      }]
     },
-    options: { responsive: true, cutout: "65%", plugins: { legend: { display: false } } }
+    options: {
+      responsive: true,
+      cutout: "65%",
+      plugins: { legend: { display: false } }
+    }
   });
- 
+
+  // BAR CHART — tight bars, matching template
   new Chart(document.getElementById("barChart").getContext("2d"), {
     type: "bar",
     data: {
       labels: ["Groceries", "Transportation", "Entertainment", "Bills", "Shopping", "Dining"],
       datasets: [
-        { label: "Budget", data: [500, 200, 150, 200, 100, 100], backgroundColor: "#c4b5fd", borderRadius: 4, barPercentage: 0.4 },
-        { label: "Spent", data: [289, 30, 26, 142, 150, 37], backgroundColor: "#10b981", borderRadius: 4, barPercentage: 0.4 }
+        {
+          label: "Budget",
+          data: [500, 200, 150, 200, 100, 100],
+          backgroundColor: "#c4b5fd",
+          borderRadius: 4,
+          categoryPercentage: 0.6,
+          barPercentage: 0.85
+        },
+        {
+          label: "Spent",
+          data: [289, 30, 26, 142, 150, 37],
+          backgroundColor: "#10b981",
+          borderRadius: 4,
+          categoryPercentage: 0.6,
+          barPercentage: 0.85
+        }
       ]
     },
     options: {
-      responsive: true, maintainAspectRatio: true,
-      plugins: { legend: { display: true, position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", color: "#6b7280", font: { size: 12 } } } },
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          display: true,
+          position: "bottom",
+          labels: {
+            usePointStyle: true,
+            pointStyle: "circle",
+            color: "#6b7280",
+            font: { size: 12 },
+            padding: 20
+          }
+        }
+      },
       scales: {
-        y: { beginAtZero: true, grid: { color: "#f3f4f6" }, ticks: { color: "#9ca3af", font: { size: 11 } } },
-        x: { grid: { display: false }, ticks: { color: "#6b7280", font: { size: 12 } } }
+        y: {
+          beginAtZero: true,
+          grid: { color: "#f3f4f6" },
+          ticks: { color: "#9ca3af", font: { size: 11 } }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { color: "#6b7280", font: { size: 12 } }
+        }
       }
     }
   });
 }
- 
+
 // ==========================================================================
 // 8. REWARDS VIEW
 // ==========================================================================
@@ -661,7 +783,6 @@ function renderRewardsView() {
   document.getElementById("main-view-slot").innerHTML = `
     ${renderPageHeader("Rewards")}
     <div class="rewards-layout">
- 
       <div class="panel points-panel">
         <div class="points-card">
           <p class="points-label">YOUR POINTS</p>
@@ -671,7 +792,6 @@ function renderRewardsView() {
         </div>
         <p class="points-desc">Earn points by staying within your monthly budget. Redeem them for grocery cashback, free deliveries, and more.</p>
       </div>
- 
       <div class="panel redeem-panel">
         <div class="redeem-head">
           <h3>Redeem grocery rewards</h3>
@@ -738,7 +858,7 @@ function renderRewardsView() {
   `;
   attachNotifToggle();
 }
- 
+
 // ==========================================================================
 // 9. SETTINGS VIEW
 // ==========================================================================
@@ -746,11 +866,11 @@ function renderSettingsView() {
   const name = state.fullName || "";
   const email = state.email || "";
   const budget = state.monthlyBudget;
- 
+
   document.getElementById("main-view-slot").innerHTML = `
     ${renderPageHeader("Settings")}
     <div class="settings-stack">
- 
+
       <div class="panel settings-panel">
         <h3 class="settings-section-title">Profile</h3>
         <p class="settings-section-sub">Your account details</p>
@@ -762,20 +882,23 @@ function renderSettingsView() {
           </div>
         </div>
       </div>
- 
+
       <div class="panel settings-panel">
         <div class="settings-budget-head">
           <div>
             <h3 class="settings-section-title">Monthly budget</h3>
             <p class="settings-section-sub">Resets on the 1st of each month</p>
           </div>
-          <button class="edit-link" id="editBudgetBtn">✏ Edit</button>
+          <button class="edit-link" id="editBudgetBtn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit
+          </button>
         </div>
         <div id="budget-display">
           <h2 class="budget-display-val">$${budget.toLocaleString()}</h2>
         </div>
       </div>
- 
+
       <div class="panel settings-panel">
         <h3 class="settings-section-title">Preferences</h3>
         <p class="settings-section-sub">Manage notifications and account actions</p>
@@ -791,15 +914,15 @@ function renderSettingsView() {
         </div>
       </div>
     </div>
- 
+
     <div class="toast" id="toast">
       <span class="toast-check">✓</span>
       Monthly budget updated
     </div>
   `;
- 
+
   attachNotifToggle();
- 
+
   document.getElementById("editBudgetBtn").addEventListener("click", () => {
     document.getElementById("budget-display").innerHTML = `
       <div class="budget-edit-row">
@@ -817,18 +940,20 @@ function renderSettingsView() {
       renderSettingsView();
       setTimeout(() => {
         const toast = document.getElementById("toast");
-        if (toast) { toast.classList.add("show"); setTimeout(() => toast.classList.remove("show"), 3000); }
+        if (toast) {
+          toast.classList.add("show");
+          setTimeout(() => toast.classList.remove("show"), 3000);
+        }
       }, 100);
     });
   });
- 
+
   document.getElementById("signOutBtn").addEventListener("click", () => {
     state.email = "";
     state.fullName = "";
     renderEmailScreen();
   });
 }
- 
-// Boot
 
+// Boot
 renderEmailScreen();
