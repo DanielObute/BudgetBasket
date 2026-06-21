@@ -34,7 +34,7 @@ function renderEmailScreen() {
         <p class="auth-subtitle">Enter your email to sign in or create an account.</p>
         <label for="email">Email</label>
         <div class="input-wrapper" id="emailWrapper">
-          <input type="email" id="email" placeholder="iii@gmail.com" autocomplete="off" />
+          <input type="email" id="email" placeholder="johndoe@gmail.com" autocomplete="off" />
           <span class="input-check" id="emailCheck">✓</span>
         </div>
         <button id="continueBtn" class="primary-btn" disabled>
@@ -55,18 +55,25 @@ function renderEmailScreen() {
   const emailCheck = document.getElementById("emailCheck");
   const emailWrapper = document.getElementById("emailWrapper");
  
-  emailInput.addEventListener("input", () => {
-    const email = emailInput.value.trim();
-    if (validateEmail(email)) {
-      continueBtn.disabled = false;
-      emailWrapper.classList.add("valid");
-      emailCheck.style.display = "block";
-    } else {
-      continueBtn.disabled = true;
-      emailWrapper.classList.remove("valid");
-      emailCheck.style.display = "none";
-    }
-  });
+
+    emailInput.addEventListener("input", () => {
+      const email = emailInput.value.trim();
+      if (validateEmail(email)) {
+        continueBtn.disabled = false;
+        emailWrapper.classList.add("valid");
+        emailWrapper.classList.remove("invalid");
+        emailCheck.style.display = "block";
+      } else {
+        continueBtn.disabled = true;
+        emailWrapper.classList.remove("valid");
+        if (email.length > 0) {
+          emailWrapper.classList.add("invalid");
+        } else {
+          emailWrapper.classList.remove("invalid");
+        }
+        emailCheck.style.display = "none";
+      }
+    });
  
   continueBtn.addEventListener("click", () => {
     state.email = emailInput.value.trim();
@@ -198,7 +205,7 @@ function renderOnboardingScreen() {
         <h2>Complete Your Profile</h2>
         <p class="auth-subtitle">Just one more step to get started.</p>
         <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" placeholder="Alex Morgan" />
+        <input type="text" id="fullName" placeholder="John Doe" />
         <div id="nameMessage"></div>
         <button id="finishBtn" class="primary-btn">Continue</button>
       </div>

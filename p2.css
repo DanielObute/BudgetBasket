@@ -99,8 +99,10 @@
      box-sizing: border-box;
    }
    
-   .input-wrapper input:focus { border-color: #a855f7; }
-   .input-wrapper.valid input { border-color: #10b981; }
+   .input-wrapper.valid input,
+   .input-wrapper.valid input:focus { border-color: #10b981; }
+   .input-wrapper.invalid input,
+   .input-wrapper.invalid input:focus { border-color: #ef4444; }
    
    .input-check {
      position: absolute;
@@ -125,8 +127,8 @@
      transition: border-color 0.2s;
    }
    
-   input[type="text"]:focus,
-   input[type="email"]:focus { border-color: #a855f7; }
+   /* input[type="text"]:focus,
+   input[type="email"]:focus { border-color: #a855f7; } */
    
    .primary-btn {
      width: 100%;
