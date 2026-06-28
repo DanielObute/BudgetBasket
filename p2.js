@@ -159,22 +159,7 @@ function renderOtpScreen() {
         setTimeout(() => {
           if (existing) {
             state.fullName = existing;
-            if (DEMO_MODE) {
-              document.querySelector(".container").innerHTML = `
-                <div class="auth-page">
-                  <div class="auth-logo">
-                    <div class="logo-icon">✦</div>
-                    <span>BudgetBasket</span>
-                  </div>
-                  <div class="auth-card" style="text-align:center;">
-                    <h2>Welcome back, ${existing}! 🎉</h2>
-                    <p class="auth-subtitle">Dashboard launching soon. Stay tuned!</p>
-                  </div>
-                </div>
-              `;
-            } else {
-              renderDashboard();
-            }
+            renderDashboard();
           } else {
             renderOnboardingScreen();
           }
@@ -224,26 +209,10 @@ function renderOnboardingScreen() {
     }
     state.fullName = name;
     localStorage.setItem(state.email, name);
-  
-    if (DEMO_MODE) {
-      document.querySelector(".container").innerHTML = `
-        <div class="auth-page">
-          <div class="auth-logo">
-            <div class="logo-icon">✦</div>
-            <span>BudgetBasket</span>
-          </div>
-          <div class="auth-card" style="text-align:center;">
-            <h2>You're all set, ${name}! 🎉</h2>
-            <p class="auth-subtitle">Dashboard launching soon. Stay tuned!</p>
-          </div>
-        </div>
-      `;
-    } else {
-      renderDashboard();
-    }
+
+    renderDashboard();
   });
 }
-
 
 // ==========================================================================
 // 4. DASHBOARD SHELL
@@ -290,20 +259,53 @@ function renderDashboard() {
       <main class="main-content" id="main-view-slot"></main>
     </div>
   `;
- 
-  document.getElementById("tab-dashboard").addEventListener("click", () => { setTab("tab-dashboard"); renderDashboardView(); });
-  document.getElementById("tab-transactions").addEventListener("click", () => { setTab("tab-transactions"); renderTransactionsView(); });
-  document.getElementById("tab-insights").addEventListener("click", () => { setTab("tab-insights"); renderInsightsView(); });
-  document.getElementById("tab-rewards").addEventListener("click", () => { setTab("tab-rewards"); renderRewardsView(); });
-  document.getElementById("tab-settings").addEventListener("click", () => { setTab("tab-settings"); renderSettingsView(); });
+
+  document.getElementById("tab-dashboard").addEventListener("click", () => {
+    setTab("tab-dashboard");
+    renderDashboardView();
+  });
+
+  document.getElementById("tab-transactions").addEventListener("click", () => {
+    setTab("tab-transactions");
+    DEMO_MODE ? renderComingSoon("Transactions") : renderTransactionsView();
+  });
+
+  document.getElementById("tab-insights").addEventListener("click", () => {
+    setTab("tab-insights");
+    DEMO_MODE ? renderComingSoon("Insights") : renderInsightsView();
+  });
+
+  document.getElementById("tab-rewards").addEventListener("click", () => {
+    setTab("tab-rewards");
+    DEMO_MODE ? renderComingSoon("Rewards") : renderRewardsView();
+  });
+
+  document.getElementById("tab-settings").addEventListener("click", () => {
+    setTab("tab-settings");
+    DEMO_MODE ? renderComingSoon("Settings") : renderSettingsView();
+  });
+
   document.getElementById("logoutBtn").addEventListener("click", () => {
     state.email = "";
     state.fullName = "";
     renderEmailScreen();
   });
- 
+
   renderDashboardView();
 }
+
+function renderComingSoon(pageName) {
+  document.getElementById("main-view-slot").innerHTML = `
+    ${renderPageHeader(pageName)}
+    <div class="panel" style="text-align:center; padding:80px 24px;">
+      <div style="font-size:48px; margin-bottom:16px;">🚀</div>
+      <h2 style="font-size:22px; font-weight:700; color:#111827; margin-bottom:8px;">Launching soon</h2>
+      <p style="font-size:14px; color:#6b7280;">Stay tuned!</p>
+    </div>
+  `;
+  attachNotifToggle();
+}
+
  
 function setTab(activeId) {
   document.querySelectorAll(".nav-item").forEach(el => el.classList.remove("active"));
